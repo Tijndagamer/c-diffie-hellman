@@ -11,10 +11,10 @@ EXEC_S = server
 EXEC_C = client
 
 client :
-	$(CC) $(CFLAGS) $(SRC_C) -o $(EXEC_C)
+	$(CC) $(CFLAGS) $(SRC_C) -lm -o $(EXEC_C)
 
 server :
-	$(CC) $(CFLAGS) $(SRC_S) -o $(EXEC_S)
+	$(CC) $(CFLAGS) $(SRC_S) -lm -o $(EXEC_S)
 
 clean : 
 	-rm $(EXEC_C) $(EXEC_S) $(OBJ)
