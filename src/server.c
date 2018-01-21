@@ -6,6 +6,7 @@
  */
 
 #include "server.h"
+#include "util.h"
 #include "diffiehellman.h"
 
 int server(char *port)
@@ -24,18 +25,18 @@ int server(char *port)
     hints.ai_flags = AI_PASSIVE;
 
     if (getaddrinfo(NULL, port, &hints, &res) != 0) {
-        printf("Error getaddrinfo\n");
+        printerr("Error getaddrinfo\n");
         return -1;
     }
 
     sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
     if (sockfd < 0) {
-        printf("Error opening socket\n");
+        printerr("Error opening socket\n");
         return -1;
     }
 
     if (bind(sockfd, res->ai_addr, res->ai_addrlen) < 0) {
-        printf("Error binding to socket\n");
+        printerr("Error binding to socket\n");
         return -1;
     }
 
@@ -46,7 +47,7 @@ int server(char *port)
 
         conn_sockfd = accept(sockfd, (struct sockaddrr *) &cl_addr, &client_len);
         if (conn_sockfd < 0) {
-            printf("Error accepting connection");
+            printerr("Error accepting connection");
             return -1;
         }
         inet_ntop(AF_INET, &(cl_addr.sin_addr), cl_ip, INET_ADDRSTRLEN);
@@ -59,13 +60,17 @@ int server(char *port)
         n1 = send_int(conn_sockfd, p);
         n2 = send_int(conn_sockfd, g);
         if (n1 < 0 && n2 < 0) {
-           printf("Error sending parameters!\n");
+           printerr("Error sending parameters!\n");
            return -1;
         }
         printf("Agreed on p: %d\t g: %d\n", p, g);
         int s_sec;
         int p_sec = 3;
         s_sec = diffiehellman_s(conn_sockfd, p, g, p_sec);
+        if (s_sec == 0) {
+            printerr("Error exchanging keys\n");
+            return -1;
+        }
         printf("Shared secret key: %d\n", s_sec);
 
         close(conn_sockfd);
