@@ -21,6 +21,12 @@
 int diffiehellman(int sockfd, int p, int g, int isec);
 
 /*
+ * We need to be sure that the supplied p in the diffie-hellman key exchange
+ * is a prime; we will check that using this function.
+ */
+int is_prime(int n);
+
+/*
  * Send and receive integers via sockets
  */
 int send_int(int fd, int i);
