@@ -49,3 +49,14 @@ int recv_int(int fd, int *i)
     *i = ntohl(ret);
     return 0;
 }
+
+/*
+ * Print error to stderr
+ */
+void printerr(const char *format, ...)
+{
+    va_list args;
+    va_start(args, format);
+    vfprintf(stderr, format, args);
+    va_end(args);
+}
