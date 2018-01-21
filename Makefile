@@ -10,6 +10,8 @@ OBJ = client.o server.o
 EXEC_S = server
 EXEC_C = client
 
+all : client server
+
 client :
 	$(CC) $(CFLAGS) $(SRC_C) -lm -o $(EXEC_C)
 
