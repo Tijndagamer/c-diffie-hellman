@@ -6,6 +6,7 @@
  */
 
 #include "client.h"
+#include "diffiehellman.h"
 
 int client(char *port, char *host)
 {
@@ -36,15 +37,15 @@ int client(char *port, char *host)
     printf("done.\n");
 
     // We're connected, so the diffie-hellman magic can start!
-    char buffer[256];
-    bzero(buffer, 256);
-    printf("> ");
-    fgets(buffer, 255, stdin);
+    int p, g;
+    recv_int(sockfd, &p);
+    recv_int(sockfd, &g);
+    printf("Agreed on p: %d\t g: %d\n", p, g);
+    int s_sec;
+    int p_sec = 4;
+    s_sec = diffiehellman_c(sockfd, p, g, p_sec);
+    printf("Shared secret key: %d\n", s_sec);
 
-    if (write(sockfd, buffer, strlen(buffer)) < 0) {
-        printf("Error writing to socket");
-        exit(1);
-    }
     close(sockfd);
     printf("Connection closed.\n");
 }
