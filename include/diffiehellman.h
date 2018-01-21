@@ -16,15 +16,16 @@
  * Perform a diffie-hellman key exchange on the connected socket with sockfd.
  * p and g are the prime and base on which the client and server have already
  * agreed.
- * isec is our secret integer.
+ * p_sec is our private secret integer.
  */
-int diffiehellman(int sockfd, int p, int g, int isec);
+int diffiehellman_c(int sockfd, int p, int g, int p_sec);
+int diffiehellman_s(int sockfd, int p, int g, int p_sec);
 
 /*
  * We need to be sure that the supplied p in the diffie-hellman key exchange
  * is a prime; we will check that using this function.
  */
-int is_prime(int n);
+int is_prime(unsigned int n);
 
 /*
  * Send and receive integers via sockets

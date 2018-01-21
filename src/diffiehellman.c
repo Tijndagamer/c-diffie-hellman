@@ -10,9 +10,30 @@
 /*
  * Perform a diffie-hellman key exchange.
  */
-int diffiehellman(int sockfd, int p, int g, int isec)
+int diffiehellman_s(int sockfd, int p, int g, int p_sec)
 {
-    // TODO
+    if (is_prime(p) == 0)
+        return 0;
+
+    int a = ((int)pow(g, p_sec)) % p;
+    send_int(sockfd, a);
+    int b;
+    recv_int(sockfd, &b);
+
+    return ((int)pow(b, p_sec)) % p;
+}
+
+int diffiehellman_c(int sockfd, int p, int g, int p_sec)
+{
+    if (is_prime(p) == 0)
+        return 0;
+
+    int a;
+    recv_int(sockfd, &a);
+    int b = ((int)pow(g, p_sec)) % p;
+    send_int(sockfd, b);
+
+    return ((int)pow(a, p_sec)) % p;
 }
 
 /*
