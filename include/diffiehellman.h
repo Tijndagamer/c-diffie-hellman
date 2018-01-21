@@ -9,7 +9,6 @@
 #define DH_h
 
 #include <math.h>
-#include <arpa/inet.h>
 #include <unistd.h>
 
 /*
@@ -26,11 +25,5 @@ int diffiehellman_s(int sockfd, int p, int g, int p_sec);
  * is a prime; we will check that using this function.
  */
 int is_prime(unsigned int n);
-
-/*
- * Send and receive integers via sockets
- */
-int send_int(int fd, int i);
-int recv_int(int fd, int *i);
 
 #endif
